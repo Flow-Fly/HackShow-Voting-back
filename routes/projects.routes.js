@@ -21,8 +21,9 @@ router.get("/", async (req, res, next) => {
 router.get("/validate", async (req, res, next) => {
 	try {
 		const { vote } = req.query
-		const projects = await Project.find({ _id: { $in: vote } })
-		res.status(200).json(projects)
+		const out = await Promise.all(vote.map((id) => Project.findById(id)))
+		// const projects = await Project.find({ _id: { $in: vote } })
+		res.status(200).json(out)
 	} catch (error) {
 		next(error)
 	}
